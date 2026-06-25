@@ -44,7 +44,8 @@
             Fecha
             <span class="hint">Semana de registro (AAAA-MM-DD)</span>
           </label>
-          <input type="date" id="Date" name="Date" required />
+          <input type="date" id="Date" name="Date"
+                 value="{{ form_data.get('Date', '') if form_data else '' }}" required />
         </div>
 
         <div class="row">
@@ -54,6 +55,7 @@
               <span class="hint">Unidades vendidas — aguacate pequeño</span>
             </label>
             <input type="number" id="4046" name="4046"
+                   value="{{ form_data.get('4046', '') if form_data else '' }}"
                    placeholder="Ej. 50000" min="0" step="any" required />
           </div>
           <div class="form-group">
@@ -62,6 +64,7 @@
               <span class="hint">Unidades vendidas — aguacate grande</span>
             </label>
             <input type="number" id="4225" name="4225"
+                   value="{{ form_data.get('4225', '') if form_data else '' }}"
                    placeholder="Ej. 30000" min="0" step="any" required />
           </div>
         </div>
@@ -73,6 +76,7 @@
               <span class="hint">Bolsas grandes vendidas (unidades)</span>
             </label>
             <input type="number" id="Large Bags" name="Large Bags"
+                   value="{{ form_data.get('Large Bags', '') if form_data else '' }}"
                    placeholder="Ej. 5000" min="0" step="any" required />
           </div>
           <div class="form-group">
@@ -80,10 +84,11 @@
               Tipo de aguacate
               <span class="hint">Convencional u orgánico</span>
             </label>
+            {% set tipo_actual = form_data.get('type', '') if form_data else '' %}
             <select id="type" name="type" required>
-              <option value="" disabled selected>Selecciona...</option>
-              <option value="conventional">Convencional</option>
-              <option value="organic">Orgánico</option>
+              <option value="" disabled {% if not tipo_actual %}selected{% endif %}>Selecciona...</option>
+              <option value="conventional" {% if tipo_actual == 'conventional' %}selected{% endif %}>Convencional</option>
+              <option value="organic" {% if tipo_actual == 'organic' %}selected{% endif %}>Orgánico</option>
             </select>
           </div>
         </div>

@@ -14,6 +14,10 @@ def index():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    # Guardamos lo que el usuario envió para poder regresarlo al template
+    # y que el formulario no se vacíe tras predecir.
+    form_data = request.form
+
     try:
         # Obtener datos del formulario
         fecha_str = request.form["Date"]
@@ -45,7 +49,12 @@ def predict():
         resultado = None
         error     = f"Error al procesar la solicitud: {str(e)}"
 
-    return render_template("formulario.html", resultado=resultado, error=error)
+    return render_template(
+        "formulario.html",
+        resultado=resultado,
+        error=error,
+        form_data=form_data
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
