@@ -3,199 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Predicción de Precio de Aguacate Hass</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      padding: 2.5rem 3rem;
-      max-width: 520px;
-      width: 100%;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .header .emoji { font-size: 3rem; }
-
-    .header h1 {
-      font-size: 1.6rem;
-      color: #2e7d32;
-      margin-top: 0.5rem;
-    }
-
-    .header p {
-      color: #777;
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #444;
-      margin-bottom: 0.4rem;
-    }
-
-    label .hint {
-      font-weight: 400;
-      color: #999;
-      font-size: 0.8rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.65rem 0.9rem;
-      border: 1.5px solid #ddd;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      color: #333;
-      transition: border-color 0.2s;
-      background: #fafafa;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: #4caf50;
-      background: #fff;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.85rem;
-      background: linear-gradient(135deg, #4caf50, #2e7d32);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-
-    button:hover { opacity: 0.92; transform: translateY(-1px); }
-    button:active { transform: translateY(0); }
-
-    .resultado {
-      margin-top: 1.5rem;
-      padding: 1.2rem;
-      background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-      border: 2px solid #a5d6a7;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .resultado p { color: #555; font-size: 0.9rem; }
-
-    .resultado .precio {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #2e7d32;
-      margin-top: 0.3rem;
-    }
-
-    .error {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: #ffebee;
-      border: 1.5px solid #ef9a9a;
-      border-radius: 10px;
-      color: #c62828;
-      font-size: 0.88rem;
-      text-align: center;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #eee;
-      margin: 1.4rem 0;
-    }
-  </style>
+  <title>Predictor de Precio de Aguacate Hass</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="emoji">🥑</div>
-      <h1>Predictor de Precio de Aguacate</h1>
-      <p>Ingresa los datos de la semana para estimar el precio promedio (USD)</p>
-    </div>
 
-    <form action="/predict" method="POST">
+  <div class="page-wrapper">
 
-      <div class="form-group">
-        <label for="Date">Fecha <span class="hint">(semana de registro)</span></label>
-        <input type="date" id="Date" name="Date" required />
+    
+    <header class="hero">
+      <div class="hero-emoji">🥑</div>
+      <h1>Predictor de Precio de Aguacate Hass</h1>
+      <p class="hero-subtitle">
+        Modelo de Machine Learning (Random Forest) entrenado con datos semanales
+        de ventas de aguacate Hass en EE. UU. (2015–2018).
+        Estima el precio promedio de venta por unidad en dólares estadounidenses.
+      </p>
+    </header>
+
+    <main class="card">
+
+      
+      <section class="instrucciones">
+        <h2>¿Cómo usar?</h2>
+        <ol>
+          <li>Selecciona la fecha de la semana que deseas consultar.</li>
+          <li>Ingresa los volúmenes de venta por tipo de aguacate y bolsas.</li>
+          <li>Elige el tipo de aguacate (convencional u orgánico).</li>
+          <li>Presiona <strong>Predecir precio</strong> y obtén el estimado al instante.</li>
+        </ol>
+      </section>
+
+      <hr class="divider" />
+
+      
+      <form action="/predict" method="POST" novalidate>
+
+        <div class="form-group">
+          <label for="Date">
+            Fecha
+            <span class="hint">Semana de registro (AAAA-MM-DD)</span>
+          </label>
+          <input type="date" id="Date" name="Date" required />
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="4046">
+              PLU 4046
+              <span class="hint">Unidades vendidas — aguacate pequeño</span>
+            </label>
+            <input type="number" id="4046" name="4046"
+                   placeholder="Ej. 50000" min="0" step="any" required />
+          </div>
+          <div class="form-group">
+            <label for="4225">
+              PLU 4225
+              <span class="hint">Unidades vendidas — aguacate grande</span>
+            </label>
+            <input type="number" id="4225" name="4225"
+                   placeholder="Ej. 30000" min="0" step="any" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="Large Bags">
+              Large Bags
+              <span class="hint">Bolsas grandes vendidas (unidades)</span>
+            </label>
+            <input type="number" id="Large Bags" name="Large Bags"
+                   placeholder="Ej. 5000" min="0" step="any" required />
+          </div>
+          <div class="form-group">
+            <label for="type">
+              Tipo de aguacate
+              <span class="hint">Convencional u orgánico</span>
+            </label>
+            <select id="type" name="type" required>
+              <option value="" disabled selected>Selecciona...</option>
+              <option value="conventional">Convencional</option>
+              <option value="organic">Orgánico</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit">🔮 Predecir precio</button>
+
+      </form>
+
+      
+      {% if resultado %}
+      <div class="resultado">
+        <p class="resultado-label">Precio promedio estimado por aguacate</p>
+        <div class="resultado-precio">{{ resultado }}</div>
+        <p class="resultado-unidad">dólares estadounidenses (USD) por unidad</p>
       </div>
+      {% endif %}
 
-      <hr class="divider"/>
-
-      <div class="row">
-        <div class="form-group">
-          <label for="4046">PLU 4046 <span class="hint">(und. pequeñas)</span></label>
-          <input type="number" id="4046" name="4046" placeholder="Ej. 50000" min="0" step="any" required />
-        </div>
-        <div class="form-group">
-          <label for="4225">PLU 4225 <span class="hint">(und. grandes)</span></label>
-          <input type="number" id="4225" name="4225" placeholder="Ej. 30000" min="0" step="any" required />
-        </div>
+      <!-- ERROR -->
+      {% if error %}
+      <div class="error">
+        <span class="error-icon">⚠️</span> {{ error }}
       </div>
+      {% endif %}
 
-      <div class="row">
-        <div class="form-group">
-          <label for="Large Bags">Large Bags <span class="hint">(bolsas grandes)</span></label>
-          <input type="number" id="Large Bags" name="Large Bags" placeholder="Ej. 5000" min="0" step="any" required />
-        </div>
-        <div class="form-group">
-          <label for="type">Tipo</label>
-          <select id="type" name="type" required>
-            <option value="" disabled selected>Selecciona...</option>
-            <option value="conventional">Convencional</option>
-            <option value="organic">Orgánico</option>
-          </select>
-        </div>
-      </div>
+    </main>
 
-      <button type="submit">🔮 Predecir Precio</button>
-    </form>
-
-    {% if resultado %}
-    <div class="resultado">
-      <p>Precio promedio estimado por aguacate</p>
-      <div class="precio">{{ resultado }}</div>
-    </div>
-    {% endif %}
-
-    {% if error %}
-    <div class="error">⚠️ {{ error }}</div>
-    {% endif %}
+    <footer class="footer">
+      Proyecto CRISP-DM · Random Forest Regressor · Avocado Prices Dataset
+    </footer>
 
   </div>
+
 </body>
 </html>
